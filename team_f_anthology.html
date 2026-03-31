@@ -1,0 +1,1355 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Team F -- Incivility Anthology</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400;1,700&family=EB+Garamond:ital,wght@0,400;0,500;1,400&family=Oswald:wght@300;400;600&display=swap" rel="stylesheet"/>
+<style>
+  :root {
+    --crimson:   #7a1c1c;
+    --deep-red:  #4a0e0e;
+    --blood:     #9b2020;
+    --parchment: #f4ead5;
+    --aged:      #e8d9b5;
+    --dark-ink:  #1a1008;
+    --warm-gray: #c9b99a;
+    --gold:      #c8973a;
+    --gold-lt:   #e8b850;
+    --off-white: #faf6ee;
+    --shadow:    rgba(26,16,8,0.45);
+  }
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body {
+    background-color: #0d0804;
+    background-image:
+      radial-gradient(ellipse at 20% 10%, rgba(90,20,20,0.25) 0%, transparent 55%),
+      radial-gradient(ellipse at 80% 90%, rgba(60,10,10,0.3) 0%, transparent 55%);
+    color: var(--dark-ink);
+    font-family: 'EB Garamond', serif;
+    font-size: 18px;
+    line-height: 1.7;
+    overflow-x: hidden;
+  }
+
+  /* ========== HEADER ========== */
+  header {
+    position: relative;
+    padding: 3rem 2rem 2rem;
+    text-align: center;
+    background: linear-gradient(180deg, #1a0505 0%, #2d0a0a 60%, #1a0505 100%);
+    border-bottom: 3px solid var(--gold);
+    overflow: hidden;
+  }
+  header::before {
+    content: '';
+    position: absolute; inset: 0;
+    background: repeating-linear-gradient(0deg, transparent, transparent 40px,
+      rgba(200,151,58,0.04) 40px, rgba(200,151,58,0.04) 41px);
+  }
+  .hdr-label {
+    font-family: 'Oswald', sans-serif; font-weight: 300;
+    letter-spacing: 0.35em; font-size: 0.75rem;
+    color: var(--gold); text-transform: uppercase; opacity: 0.85;
+  }
+  .hdr-rule { width: 60%; margin: 0.5rem auto; border: none; border-top: 1px solid var(--gold); opacity: 0.5; }
+  h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(2.4rem, 6vw, 5rem);
+    font-weight: 900; color: var(--parchment);
+    line-height: 1.05; letter-spacing: -0.01em;
+    margin: 0.4rem 0 0.2rem;
+    text-shadow: 0 4px 24px rgba(0,0,0,0.7);
+  }
+  h1 em { color: var(--blood); font-style: italic; }
+  .hdr-dates {
+    font-family: 'Playfair Display', serif; font-style: italic;
+    font-size: 1.05rem; color: var(--warm-gray);
+    margin-top: 0.25rem;
+  }
+  .hdr-team {
+    display: inline-block; margin-top: 1rem;
+    padding: 0.3rem 1.8rem;
+    background: var(--crimson); color: var(--parchment);
+    font-family: 'Oswald', sans-serif; font-weight: 400;
+    letter-spacing: 0.2em; font-size: 0.82rem; text-transform: uppercase;
+    border: 1px solid var(--blood);
+  }
+  .hdr-unit {
+    font-family: 'Oswald', sans-serif; font-weight: 300;
+    letter-spacing: 0.25em; font-size: 0.78rem;
+    color: var(--gold-lt); text-transform: uppercase;
+    margin-top: 0.75rem; opacity: 0.9;
+  }
+  .hdr-byline {
+    font-family: 'EB Garamond', serif; font-style: italic;
+    font-size: 0.98rem; color: var(--warm-gray);
+    margin-top: 0.3rem;
+  }
+
+  /* ========== NAV TABS ========== */
+  nav {
+    position: sticky; top: 0; z-index: 100;
+    background: var(--deep-red); border-bottom: 2px solid var(--gold);
+    display: flex; justify-content: center; flex-wrap: wrap;
+  }
+  nav button {
+    display: inline-block; padding: 0.7rem 1.3rem;
+    font-family: 'Oswald', sans-serif; font-size: 0.73rem;
+    font-weight: 400; letter-spacing: 0.16em; text-transform: uppercase;
+    color: var(--warm-gray); background: transparent; border: none;
+    border-right: 1px solid rgba(200,151,58,0.2);
+    cursor: pointer; transition: color 0.2s, background 0.2s;
+  }
+  nav button:first-child { border-left: 1px solid rgba(200,151,58,0.2); }
+  nav button:hover { color: var(--gold-lt); background: rgba(255,255,255,0.04); }
+  nav button.active { color: var(--gold-lt); background: rgba(200,151,58,0.12); border-bottom: 2px solid var(--gold-lt); }
+
+  /* ========== PANELS ========== */
+  .tab-panel { display: none; }
+  .tab-panel.active { display: block; }
+  .panel-inner { max-width: 1100px; margin: 0 auto; padding: 2.5rem 1.5rem 4rem; }
+
+  /* ========== HOME TAB ========== */
+  .eq-hero {
+    background: var(--parchment);
+    border-bottom: 3px double var(--crimson);
+    padding: 3rem 2rem 2.5rem;
+    text-align: center;
+    position: relative;
+  }
+  .eq-hero::after {
+    content: '✦'; position: absolute; bottom: -0.75rem; left: 50%;
+    transform: translateX(-50%); background: var(--parchment);
+    color: var(--crimson); padding: 0 0.5rem; font-size: 0.85rem;
+  }
+  .eq-strand {
+    font-family: 'Oswald', sans-serif; font-size: 0.68rem;
+    letter-spacing: 0.4em; text-transform: uppercase;
+    color: var(--crimson); margin-bottom: 0.75rem;
+  }
+  .eq-question {
+    font-family: 'Playfair Display', serif; font-size: 1.3rem;
+    font-style: italic; color: var(--deep-red);
+    max-width: 820px; margin: 0 auto 2rem; line-height: 1.5;
+  }
+  .eq-answer-block {
+    max-width: 860px; margin: 0 auto;
+    background: #fff9f0;
+    border-left: 5px solid var(--crimson);
+    padding: 1.6rem 2rem;
+    text-align: left;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+  }
+  .eq-answer-block h3 {
+    font-family: 'Playfair Display', serif; font-size: 1.1rem;
+    color: var(--deep-red); margin-bottom: 0.8rem;
+  }
+  .eq-answer-block p {
+    font-size: 1rem; color: #3a2a18; line-height: 1.75;
+    margin-bottom: 0.9rem;
+  }
+  .eq-answer-block p:last-child { margin-bottom: 0; }
+
+  .overview-grid {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem;
+    margin-top: 2.5rem;
+  }
+  @media (max-width: 680px) { .overview-grid { grid-template-columns: 1fr; } }
+  .overview-card {
+    background: var(--parchment);
+    border-top: 4px solid var(--crimson);
+    padding: 1.5rem 1.6rem;
+    box-shadow: 0 8px 28px var(--shadow);
+    cursor: pointer; transition: transform 0.18s;
+  }
+  .overview-card:hover { transform: translateY(-3px); }
+  .overview-card .oc-num {
+    font-family: 'Playfair Display', serif; font-size: 3rem;
+    font-weight: 900; color: var(--crimson); opacity: 0.18;
+    line-height: 1;
+  }
+  .overview-card h3 {
+    font-family: 'Playfair Display', serif; font-size: 1.2rem;
+    color: var(--deep-red); margin: 0.3rem 0 0.5rem;
+  }
+  .overview-card p { font-size: 0.93rem; color: #3a2a18; }
+  .overview-card .oc-date {
+    display: inline-block; margin-top: 0.7rem;
+    padding: 0.15rem 0.75rem; background: var(--crimson); color: var(--parchment);
+    font-family: 'Oswald', sans-serif; font-size: 0.68rem; letter-spacing: 0.2em;
+  }
+
+  /* ========== SECTION HEADING ========== */
+  .sec-heading {
+    display: flex; align-items: flex-start; gap: 1.2rem;
+    margin-bottom: 2.5rem; padding-bottom: 1rem;
+    border-bottom: 2px solid rgba(200,151,58,0.3);
+  }
+  .sec-num {
+    font-family: 'Playfair Display', serif; font-size: 4rem; font-weight: 900;
+    color: var(--crimson); line-height: 1; opacity: 0.2; flex-shrink: 0;
+  }
+  .sec-title h2 {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(1.5rem, 3.5vw, 2.3rem); font-weight: 700;
+    color: var(--parchment); line-height: 1.15;
+  }
+  .sec-title h2 em { color: var(--gold); font-style: normal; }
+  .sec-tag {
+    display: inline-block; margin-top: 0.4rem; padding: 0.2rem 0.85rem;
+    background: var(--crimson); color: var(--parchment);
+    font-family: 'Oswald', sans-serif; font-size: 0.7rem; letter-spacing: 0.2em;
+  }
+
+  /* ========== PRESENTATION SLIDES ========== */
+  .slide {
+    background: linear-gradient(135deg, #180606 0%, #2a0c0c 100%);
+    border: 1px solid rgba(200,151,58,0.2);
+    border-left: 4px solid var(--gold);
+    padding: 1.8rem 2rem;
+    margin-bottom: 1.6rem;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2rem;
+    align-items: center;
+  }
+  .slide.flip { direction: rtl; }
+  .slide.flip > * { direction: ltr; }
+  .slide.wide { grid-template-columns: 1fr; }
+  @media (max-width: 750px) { .slide, .slide.flip { grid-template-columns: 1fr; direction: ltr; } }
+
+  .slide-img {
+    width: 100%;
+    aspect-ratio: 4/3;
+    object-fit: cover;
+    object-position: top center;
+    border: 2px solid rgba(200,151,58,0.35);
+    display: block;
+  }
+  .slide-placeholder {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    aspect-ratio: 4/3;
+    background: rgba(0,0,0,0.35);
+    border: 2px dashed rgba(200,151,58,0.45);
+    gap: 0.6rem;
+    padding: 1rem;
+  }
+  .slide-placeholder .pl-emoji { font-size: 2.8rem; line-height: 1; }
+  .slide-placeholder .pl-label {
+    font-family: 'Oswald', sans-serif; font-size: 0.65rem;
+    letter-spacing: 0.2em; text-transform: uppercase;
+    color: var(--gold); margin-bottom: 0.2rem;
+  }
+  .slide-placeholder .pl-cap {
+    font-family: 'EB Garamond', serif; font-style: italic;
+    font-size: 0.88rem; color: var(--warm-gray);
+    text-align: center; line-height: 1.4;
+  }
+
+  .slide-content h3 {
+    font-family: 'Playfair Display', serif; font-size: 1.45rem;
+    color: var(--gold-lt); margin-bottom: 1rem; line-height: 1.2;
+  }
+  .slide-content ul { list-style: none; padding: 0; }
+  .slide-content ul li {
+    position: relative;
+    padding: 0.45rem 0 0.45rem 1.6rem;
+    color: var(--parchment);
+    font-size: 0.97rem;
+    line-height: 1.55;
+    border-bottom: 1px solid rgba(200,151,58,0.08);
+  }
+  .slide-content ul li::before {
+    content: '▶';
+    position: absolute; left: 0; top: 0.6rem;
+    color: var(--crimson); font-size: 0.55rem;
+  }
+  .slide-content ul li:last-child { border-bottom: none; }
+  .slide-content .slide-label {
+    font-family: 'Oswald', sans-serif; font-size: 0.65rem;
+    letter-spacing: 0.35em; text-transform: uppercase;
+    color: var(--gold); margin-bottom: 0.5rem;
+  }
+
+  /* ========== SIGNIFICANCE BANNER ========== */
+  .sig-banner {
+    background: linear-gradient(135deg, var(--deep-red), #3d1010);
+    border-left: 4px solid var(--gold);
+    padding: 1.4rem 1.8rem;
+    margin: 1.5rem 0;
+    box-shadow: 0 4px 20px var(--shadow);
+  }
+  .sig-banner .sig-label {
+    font-family: 'Oswald', sans-serif; font-size: 0.65rem;
+    letter-spacing: 0.35em; text-transform: uppercase;
+    color: var(--gold); margin-bottom: 0.5rem;
+  }
+  .sig-banner ul { list-style: none; padding: 0; }
+  .sig-banner ul li {
+    position: relative; padding: 0.3rem 0 0.3rem 1.4rem;
+    color: var(--parchment); font-size: 0.95rem; line-height: 1.55;
+  }
+  .sig-banner ul li::before {
+    content: '★'; position: absolute; left: 0; top: 0.35rem;
+    color: var(--gold); font-size: 0.6rem;
+  }
+
+  /* ========== QUIZ ========== */
+  .quiz-wrap {
+    background: linear-gradient(180deg, #150505, #1f0808);
+    border: 1px solid rgba(200,151,58,0.2);
+    padding: 2rem; margin-top: 2rem;
+  }
+  .quiz-wrap h3 {
+    font-family: 'Playfair Display', serif; font-size: 1.4rem;
+    color: var(--parchment); margin-bottom: 0.25rem;
+  }
+  .quiz-sub {
+    font-family: 'Oswald', sans-serif; font-size: 0.68rem;
+    letter-spacing: 0.3em; text-transform: uppercase;
+    color: var(--gold); margin-bottom: 1.8rem;
+  }
+  .q-block { padding: 1.2rem 1.4rem; margin-bottom: 1.2rem; background: rgba(244,234,213,0.05); border: 1px solid rgba(200,151,58,0.2); }
+  .q-label { font-family: 'Oswald', sans-serif; font-size: 0.63rem; letter-spacing: 0.3em; text-transform: uppercase; color: var(--gold); margin-bottom: 0.6rem; }
+  .q-text { font-family: 'Playfair Display', serif; font-size: 1rem; color: var(--parchment); margin-bottom: 0.9rem; line-height: 1.5; }
+  .options { display: flex; flex-direction: column; gap: 0.45rem; }
+  .opt-btn {
+    background: transparent; border: 1px solid rgba(200,151,58,0.28);
+    padding: 0.55rem 0.9rem; color: var(--warm-gray);
+    font-family: 'EB Garamond', serif; font-size: 0.93rem;
+    text-align: left; cursor: pointer; transition: all 0.15s; border-radius: 2px;
+  }
+  .opt-btn:hover:not(:disabled) { border-color: var(--gold); color: var(--parchment); background: rgba(200,151,58,0.08); }
+  .opt-btn.correct { background: rgba(50,120,50,0.3); border-color: #5a9a5a; color: #a8d4a8; }
+  .opt-btn.wrong   { background: rgba(150,30,30,0.3); border-color: var(--blood); color: #e4a0a0; }
+  .opt-btn:disabled { cursor: default; }
+  .q-feedback { margin-top: 0.7rem; font-style: italic; font-size: 0.9rem; min-height: 1.2rem; color: var(--warm-gray); }
+  .score-board { text-align: center; padding: 1.2rem; border-top: 1px solid rgba(200,151,58,0.3); margin-top: 0.8rem; }
+  .score-board p { font-family: 'Playfair Display', serif; font-size: 1.3rem; color: var(--parchment); }
+  .score-num { color: var(--gold-lt); font-weight: 700; }
+  .reset-btn {
+    margin-top: 0.8rem; padding: 0.5rem 1.8rem;
+    background: var(--crimson); border: none; color: var(--parchment);
+    font-family: 'Oswald', sans-serif; font-size: 0.78rem;
+    letter-spacing: 0.2em; text-transform: uppercase;
+    cursor: pointer; transition: background 0.2s;
+  }
+  .reset-btn:hover { background: var(--blood); }
+  .hidden { display: none !important; }
+
+  /* ========== LEARN TAB ========== */
+  .learn-section-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.7rem; font-weight: 700;
+    color: var(--gold-lt); margin: 3rem 0 0.3rem;
+    border-bottom: 1px solid rgba(200,151,58,0.3);
+    padding-bottom: 0.5rem;
+  }
+  .learn-section-title:first-of-type { margin-top: 0; }
+  .learn-card {
+    background: var(--parchment); border-top: 3px solid var(--crimson);
+    padding: 1.4rem 1.6rem; margin-bottom: 1.2rem;
+    box-shadow: 0 6px 24px var(--shadow);
+  }
+  .learn-card.gold { border-top-color: var(--gold); }
+  .learn-card .lc-label {
+    font-family: 'Oswald', sans-serif; font-size: 0.63rem;
+    letter-spacing: 0.35em; text-transform: uppercase;
+    color: var(--crimson); margin-bottom: 0.45rem;
+  }
+  .learn-card.gold .lc-label { color: var(--gold); }
+  .learn-card h3 {
+    font-family: 'Playfair Display', serif; font-size: 1.05rem;
+    font-weight: 700; color: var(--deep-red); margin-bottom: 0.5rem;
+  }
+  .learn-card p, .learn-card ul { font-size: 0.93rem; color: #3a2a18; line-height: 1.65; }
+  .learn-card ul { padding-left: 1.1rem; }
+  .learn-card ul li { margin-bottom: 0.3rem; }
+  .learn-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.2rem; margin-bottom: 1.2rem; }
+  .learn-grid.triple { grid-template-columns: 1fr 1fr 1fr; }
+  @media (max-width: 750px) { .learn-grid, .learn-grid.triple { grid-template-columns: 1fr; } }
+
+  .person-card {
+    background: var(--parchment); text-align: center;
+    padding: 1.2rem 1rem; border-top: 3px solid var(--gold);
+    box-shadow: 0 4px 18px var(--shadow);
+  }
+  .person-card img {
+    width: 100px; height: 120px; object-fit: cover; object-position: top;
+    border: 2px solid var(--gold); margin-bottom: 0.6rem; display: block; margin-left: auto; margin-right: auto;
+  }
+  .person-card h4 { font-family: 'Playfair Display', serif; font-size: 1rem; color: var(--deep-red); margin-bottom: 0.3rem; }
+  .person-card p { font-size: 0.85rem; color: #3a2a18; line-height: 1.5; }
+
+  .pull-quote {
+    border-left: 4px solid var(--crimson); margin: 1.5rem 0; padding: 0.5rem 1.5rem;
+  }
+  .pull-quote p {
+    font-family: 'Playfair Display', serif; font-style: italic;
+    font-size: 1.15rem; color: var(--aged); line-height: 1.55;
+  }
+  .pull-quote cite {
+    display: block; font-family: 'Oswald', sans-serif; font-style: normal;
+    font-size: 0.68rem; letter-spacing: 0.2em; color: var(--warm-gray);
+    margin-top: 0.4rem; text-transform: uppercase;
+  }
+
+  .learn-sig {
+    background: linear-gradient(135deg, var(--deep-red), #3d1010);
+    border-left: 4px solid var(--gold);
+    padding: 1.4rem 1.8rem; margin: 1.5rem 0;
+    box-shadow: 0 4px 20px var(--shadow);
+  }
+  .learn-sig p { color: var(--parchment); font-size: 0.96rem; line-height: 1.7; }
+  .learn-sig strong { color: var(--gold-lt); }
+
+  .context-img {
+    width: 100%; max-height: 300px; object-fit: cover;
+    border: 2px solid rgba(200,151,58,0.35); margin-bottom: 1.2rem; display: block;
+  }
+
+  /* ========== GUESS THE SOURCE ========== */
+  .game-wrap {
+    max-width: 760px; margin: 0 auto;
+    background: linear-gradient(180deg, #150505, #1f0808);
+    border: 1px solid rgba(200,151,58,0.25);
+    padding: 2.5rem 2rem;
+  }
+  .game-wrap h2 {
+    font-family: 'Playfair Display', serif; font-size: 1.9rem;
+    color: var(--parchment); text-align: center; margin-bottom: 0.2rem;
+  }
+  .game-sub {
+    font-family: 'Oswald', sans-serif; font-size: 0.68rem;
+    letter-spacing: 0.3em; text-transform: uppercase;
+    color: var(--gold); text-align: center; margin-bottom: 2rem;
+  }
+  .progress-dots { display: flex; justify-content: center; gap: 0.5rem; margin-bottom: 1.8rem; }
+  .prog-dot {
+    width: 10px; height: 10px; border-radius: 50%;
+    background: rgba(200,151,58,0.2); border: 1px solid rgba(200,151,58,0.4);
+    transition: background 0.3s;
+  }
+  .prog-dot.done { background: var(--gold); }
+  .prog-dot.current { background: var(--blood); border-color: var(--blood); }
+
+  .game-quote-box {
+    border-left: 4px solid var(--crimson);
+    padding: 1rem 1.5rem; margin-bottom: 1.5rem;
+    background: rgba(244,234,213,0.05);
+  }
+  .game-quote-box p {
+    font-family: 'Playfair Display', serif; font-style: italic;
+    font-size: 1.15rem; color: var(--parchment); line-height: 1.55;
+  }
+  .game-prompt {
+    font-family: 'Oswald', sans-serif; font-size: 0.7rem;
+    letter-spacing: 0.25em; text-transform: uppercase;
+    color: var(--gold); margin-bottom: 0.9rem;
+  }
+  .game-options { display: flex; flex-direction: column; gap: 0.5rem; }
+  .game-opt {
+    background: transparent; border: 1px solid rgba(200,151,58,0.3);
+    padding: 0.6rem 1rem; color: var(--warm-gray);
+    font-family: 'EB Garamond', serif; font-size: 0.95rem;
+    text-align: left; cursor: pointer; transition: all 0.15s; border-radius: 2px;
+  }
+  .game-opt:hover:not(:disabled) { border-color: var(--gold); color: var(--parchment); background: rgba(200,151,58,0.08); }
+  .game-opt.correct { background: rgba(50,120,50,0.3); border-color: #5a9a5a; color: #a8d4a8; }
+  .game-opt.wrong   { background: rgba(150,30,30,0.3); border-color: var(--blood); color: #e4a0a0; }
+  .game-opt:disabled { cursor: default; }
+  .game-feedback { margin-top: 0.8rem; font-style: italic; font-size: 0.92rem; min-height: 1.3rem; color: var(--warm-gray); }
+  .game-next {
+    margin-top: 1.2rem; padding: 0.55rem 2rem;
+    background: var(--crimson); border: none; color: var(--parchment);
+    font-family: 'Oswald', sans-serif; font-size: 0.78rem;
+    letter-spacing: 0.2em; text-transform: uppercase;
+    cursor: pointer; transition: background 0.2s; display: none;
+  }
+  .game-next:hover { background: var(--blood); }
+  .game-end {
+    text-align: center; padding: 2rem 1rem;
+  }
+  .game-end .end-medal { font-size: 3rem; margin-bottom: 0.5rem; }
+  .game-end h3 { font-family: 'Playfair Display', serif; font-size: 1.5rem; color: var(--parchment); margin-bottom: 0.3rem; }
+  .game-end .end-score { font-family: 'Oswald', sans-serif; font-size: 0.85rem; letter-spacing: 0.2em; color: var(--gold); margin-bottom: 1.2rem; }
+  .game-end .end-comment { font-style: italic; font-size: 1rem; color: var(--warm-gray); margin-bottom: 1.5rem; }
+
+  /* ========== BIBLIOGRAPHY ========== */
+  .bib-inner {
+    background: var(--aged); padding: 2rem 2.5rem;
+    border-top: 3px double var(--crimson);
+    max-width: 900px; margin: 0 auto;
+  }
+  .bib-inner h2 { font-family: 'Playfair Display', serif; font-size: 1.5rem; color: var(--deep-red); margin-bottom: 0.25rem; }
+  .bib-lbl { font-family: 'Oswald', sans-serif; font-size: 0.63rem; letter-spacing: 0.35em; text-transform: uppercase; color: var(--crimson); margin-bottom: 1.2rem; }
+  .bib-entry { font-size: 0.91rem; color: #3a2a18; padding: 0.75rem 0; border-bottom: 1px solid rgba(122,28,28,0.2); line-height: 1.6; text-indent: -2rem; padding-left: 2rem; }
+  .bib-entry:last-child { border-bottom: none; }
+
+  /* ========== DIVIDER ========== */
+  .divider { display: flex; align-items: center; gap: 1rem; margin: 3rem 0 2rem; }
+  .divider::before, .divider::after { content: ''; flex: 1; height: 1px; background: var(--gold); opacity: 0.35; }
+  .divider span { color: var(--gold); font-family: 'Playfair Display', serif; font-style: italic; font-size: 0.95rem; white-space: nowrap; opacity: 0.8; }
+
+  /* ========== FOOTER ========== */
+  footer {
+    background: #0d0804; border-top: 2px solid var(--gold);
+    padding: 1.8rem; text-align: center; color: var(--warm-gray);
+    font-family: 'Oswald', sans-serif; font-size: 0.7rem;
+    letter-spacing: 0.25em; text-transform: uppercase; opacity: 0.65;
+  }
+</style>
+</head>
+<body>
+
+<!-- ===== HEADER ===== -->
+<header>
+  <p class="hdr-label">Incivility &nbsp;·&nbsp; 1846 to 1860 &nbsp;·&nbsp; Student-Teaching Anthology</p>
+  <hr class="hdr-rule"/>
+  <h1>Fire on the <em>Frontier</em></h1>
+  <p class="hdr-dates">October 16, 1859 &nbsp;&nbsp;·&nbsp;&nbsp; February 2, 1860</p>
+  <div class="hdr-team">Team F &nbsp;·&nbsp; American History</div>
+  <p class="hdr-unit">Incivility Unit</p>
+  <p class="hdr-byline">By: Niral Parmar, Anvi Dobhal &amp; Anay Tandon &nbsp;·&nbsp; 10-1 Team F</p>
+</header>
+
+<!-- ===== NAV ===== -->
+<nav>
+  <button onclick="showTab('home')" id="btn-home" class="active">Home</button>
+  <button onclick="showTab('learn')" id="btn-learn">Learn</button>
+  <button onclick="showTab('hf')" id="btn-hf">Harper's Ferry</button>
+  <button onclick="showTab('dr')" id="btn-dr">Davis Resolutions</button>
+  <button onclick="showTab('game')" id="btn-game">Guess the Source</button>
+  <button onclick="showTab('bib')" id="btn-bib">Bibliography</button>
+</nav>
+
+<!-- ===================================================
+     HOME TAB
+===================================================== -->
+<section id="tab-home" class="tab-panel active">
+
+  <!-- LARGE EQ ANSWER -->
+  <div class="eq-hero">
+    <p class="eq-strand">Essential Question &nbsp;·&nbsp; History Strand A2</p>
+    <blockquote class="eq-question">
+      "How have economic, political and cultural decisions promoted or prevented the growth of personal freedom, individual responsibility, equality and respect for human dignity?"
+    </blockquote>
+    <div class="eq-answer-block">
+      <h3>Our Answer</h3>
+      <p>
+        By 1859 to 1860, the United States had exhausted every legislative compromise on slavery. Economic decisions, specifically the Southern economy's total dependence on enslaved labor, made any real compromise impossible: slaveholders could not afford to accept limits on slavery, and the North could not afford to keep subsidizing a system that violated the founding ideals of human dignity.
+      </p>
+      <p>
+        John Brown's raid on Harper's Ferry in October 1859 was a direct consequence of political failure. Decades of compromises, from the Missouri Compromise to the Kansas-Nebraska Act, had only delayed the reckoning. Brown believed that legal and political channels had been exhausted and that only violent action could force the nation to confront slavery. His raid failed militarily, but it succeeded in making the sectional crisis impossible to ignore.
+      </p>
+      <p>
+        Jefferson Davis's Senate Resolutions in February 1860 represent the political and cultural counterpart. Rather than moving toward equality and human dignity, Davis demanded that the federal government actively protect the institution of slavery. He framed slaveholding as a constitutional right, placing property rights above the basic human dignity of millions of enslaved people. This was a direct political decision that prevented any growth of personal freedom.
+      </p>
+      <p>
+        Together, these events show how economic dependence on slavery drove political extremism, which in turn shattered cultural trust between the North and South. The result was a nation that could not hold together. The Civil War was not an accident: it was the direct consequence of decades of economic, political, and cultural decisions that prioritized the profits of a few over the freedom and dignity of millions.
+      </p>
+    </div>
+  </div>
+
+  <div style="display:grid;grid-template-columns:repeat(5,1fr);gap:4px;max-height:220px;overflow:hidden;">
+    <img src="pics/john brown.jpg"               alt="John Brown"         style="width:100%;height:220px;object-fit:cover;object-position:top;"/>
+    <img src="pics3/harpers_ferry_battle.png"     alt="Battle at Harper's Ferry" style="width:100%;height:220px;object-fit:cover;"/>
+    <img src="pics3/brown_scaffold.png"           alt="John Brown at the scaffold" style="width:100%;height:220px;object-fit:cover;"/>
+    <img src="pics/jefferson davis.jpg"           alt="Jefferson Davis"   style="width:100%;height:220px;object-fit:cover;object-position:top;"/>
+    <img src="pics/abrahamlincoln.jpg"            alt="Abraham Lincoln"   style="width:100%;height:220px;object-fit:cover;object-position:top;"/>
+  </div>
+
+  <div class="panel-inner">
+    <div class="divider"><span>✦ &nbsp; Events Covered &nbsp; ✦</span></div>
+    <div class="overview-grid">
+      <div class="overview-card" onclick="showTab('hf')">
+        <div class="oc-num">01</div>
+        <h3>The Raid on Harper's Ferry</h3>
+        <p>John Brown's violent attempt to ignite a slave rebellion shocked the nation and convinced the South that the North had declared war on their way of life.</p>
+        <span class="oc-date">October 16 to 18, 1859</span>
+      </div>
+      <div class="overview-card" onclick="showTab('dr')">
+        <div class="oc-num">02</div>
+        <h3>The Jefferson Davis Resolutions</h3>
+        <p>Davis's Senate ultimatum demanded Congress protect slavery in all territories, splitting the Democratic Party and making Lincoln's election, and secession, inevitable.</p>
+        <span class="oc-date">February 2, 1860</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ===================================================
+     LEARN TAB
+===================================================== -->
+<section id="tab-learn" class="tab-panel">
+<div class="panel-inner">
+
+  <h2 class="learn-section-title">Context: America on the Brink, 1850 to 1859</h2>
+  <div class="learn-grid">
+    <div class="learn-card">
+      <p class="lc-label">Political Context</p>
+      <h3>A Nation Splitting Apart</h3>
+      <p>By the mid-1850s, the United States was fracturing along sectional lines. The Compromise of 1850, the Fugitive Slave Act, the Kansas-Nebraska Act of 1854, and "Bleeding Kansas" had exhausted goodwill between North and South. The Republican Party, founded in 1854 on a platform opposing slavery's expansion, rose rapidly. Moderate voices were losing ground to extremists on both sides.</p>
+    </div>
+    <div class="learn-card">
+      <p class="lc-label">Economic Context</p>
+      <h3>Slavery and the Southern Economy</h3>
+      <p>The Southern economy was built almost entirely on enslaved labor. By 1860, the South's enslaved population represented the largest single financial asset in the entire United States, worth more than all the nation's railroads and factories combined. Southern elites genuinely believed their civilization could not survive without slavery, making any compromise on the issue existential rather than political.</p>
+    </div>
+  </div>
+
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-bottom:1.2rem;">
+    <img src="pics/harpers_ferry_west_virginia.jpg" alt="Harper's Ferry, West Virginia" class="context-img" style="margin-bottom:0;"/>
+    <img src="pics2/raid_on_harpers_ferry.jpg" alt="The Raid on Harper's Ferry" class="context-img" style="margin-bottom:0;"/>
+  </div>
+
+  <div class="divider"><span>✦ &nbsp; Event One &nbsp; ✦</span></div>
+
+  <h2 class="learn-section-title">The Raid on Harper's Ferry (October 1859)</h2>
+
+  <div class="learn-grid">
+    <div class="learn-card">
+      <p class="lc-label">Background</p>
+      <h3>Who Was John Brown?</h3>
+      <p>John Brown (1800 to 1859) was a radical abolitionist from Ohio who believed from an early age that God had called him to destroy slavery. Unlike most abolitionists, who favored peaceful persuasion, Brown was convinced that violence was the only effective weapon. After the Pottawatomie Massacre of 1856, in which Brown and his sons killed five pro-slavery settlers in Kansas, he became a polarizing national figure: a hero to radical abolitionists and a murderous fanatic to the South and many Northern moderates.</p>
+    </div>
+    <div class="learn-card">
+      <p class="lc-label">Background</p>
+      <h3>The Plan</h3>
+      <p>By 1857 to 1859, Brown was raising money and recruiting supporters for a far more ambitious scheme. He planned to seize the federal armory at Harper's Ferry, Virginia, which held over 100,000 weapons. Armed with these weapons, he expected enslaved people throughout the South to rise up in rebellion, flee to the mountains, and fight for their freedom. The plan was secretly funded by a group of wealthy Northern abolitionists known as the "Secret Six."</p>
+    </div>
+  </div>
+
+  <div class="learn-card">
+    <p class="lc-label">Description</p>
+    <h3>The Night of October 16, 1859</h3>
+    <p>On the night of October 16, 1859, Brown led 21 men (16 white, 5 Black) across the Potomac River into Harper's Ferry. They quickly seized the federal armory and the adjacent engine house, cut telegraph lines to prevent word from spreading, and took several prominent local citizens as hostages, including a great-grandnephew of George Washington. Brown fully expected enslaved people to flood into Harper's Ferry once word spread. They did not come. Local militiamen and armed civilians began surrounding the armory on October 17, exchanging fire with Brown's small force. Several of Brown's men were killed, and Brown retreated into the engine house with his remaining men and hostages.</p>
+  </div>
+
+  <div class="learn-grid">
+    <div class="learn-card">
+      <p class="lc-label">Description</p>
+      <h3>The Marines Arrive</h3>
+      <p>On October 18, President Buchanan dispatched a force of U.S. Marines under the command of Colonel Robert E. Lee and Lieutenant J.E.B. Stuart. Lee offered terms; Brown refused. Marines stormed the engine house within minutes. Ten of Brown's men were killed in the fighting, including two of his sons. Brown himself was wounded, captured, and taken into custody. The entire raid lasted less than 36 hours.</p>
+    </div>
+    <div class="learn-card">
+      <p class="lc-label">Description</p>
+      <h3>Trial and Execution</h3>
+      <p>Brown was swiftly tried in Charlestown, Virginia, on charges of treason against the state of Virginia, murder, and conspiracy with enslaved people. He was convicted on all counts. During his trial, Brown delivered calm, eloquent speeches that transformed him in Northern eyes from a violent fanatic into a principled martyr. He was hanged on December 2, 1859. On the morning of his execution, he handed a guard his now-famous final note: "I, John Brown, am now quite certain that the crimes of this guilty land will never be purged away but with blood."</p>
+    </div>
+  </div>
+
+  <div class="pull-quote">
+    <p>"I, John Brown, am now quite certain that the crimes of this guilty land will never be purged away but with blood."</p>
+    <cite>John Brown, final written note, December 2, 1859</cite>
+  </div>
+
+  <div class="learn-sig">
+    <p><strong>Significance in American History:</strong> The Harper's Ferry raid was a turning point that made sectional reconciliation nearly impossible. The South was horrified not only by the attack itself, but by the sympathy many Northerners expressed for Brown after his execution. Church bells rang in many Northern towns at the moment of his hanging. Southern leaders concluded that Northern public opinion had turned against them. The raid confirmed every Southern fear about Northern abolitionism, strengthened the hand of Southern fire-eaters who called for secession, and made the 1860 election a zero-sum contest with no room for compromise. Even Robert E. Lee, who put down the raid as a federal officer, would resign his commission 18 months later to fight against that same government.</p>
+  </div>
+
+  <h3 style="font-family:'Playfair Display',serif; color:var(--gold-lt); font-size:1.1rem; margin: 2rem 0 1rem;">Key Figures: Harper's Ferry</h3>
+  <div class="learn-grid triple">
+    <div class="person-card">
+      <img src="pics/john brown.jpg" alt="John Brown"/>
+      <h4>John Brown</h4>
+      <p>Radical abolitionist. Led the raid. Executed December 2, 1859. Became a Northern martyr and a Southern symbol of Northern aggression.</p>
+    </div>
+    <div class="person-card">
+      <img src="pics/Robert_Edward_Lee.jpg" alt="Robert E. Lee"/>
+      <h4>Col. Robert E. Lee</h4>
+      <p>Commanded U.S. Marines who retook the armory. Celebrated as a federal hero in 1859; resigned to command Confederate forces in 1861.</p>
+    </div>
+    <div class="person-card">
+      <img src="pics/frederick_douglass.jpg" alt="Frederick Douglass"/>
+      <h4>Frederick Douglass</h4>
+      <p>Prominent abolitionist who knew Brown but did not join the raid, fearing it would fail. Later called Brown "the man who lived by the sword."</p>
+    </div>
+  </div>
+
+  <div class="divider"><span>✦ &nbsp; Event Two &nbsp; ✦</span></div>
+
+  <h2 class="learn-section-title">The Jefferson Davis Resolutions (February 1860)</h2>
+
+  <div class="learn-grid">
+    <div class="learn-card">
+      <p class="lc-label">Background</p>
+      <h3>The South in Early 1860</h3>
+      <p>By early 1860, Southern Democrats felt their position was desperate. Several Northern states had passed "Personal Liberty Laws" that effectively nullified the Fugitive Slave Act of 1850, refusing to help return escaped enslaved people. The Republican Party was surging in the North and was widely expected to win the 1860 presidential election on a platform explicitly opposing slavery's expansion into new territories. Southern leaders feared that without federal protection of slavery, the institution would eventually be surrounded, isolated, and destroyed.</p>
+    </div>
+    <div class="learn-card">
+      <p class="lc-label">Background</p>
+      <h3>Jefferson Davis's Strategy</h3>
+      <p>Jefferson Davis of Mississippi was one of the most powerful men in the U.S. Senate. A former secretary of war and military hero, he was the leading voice of Southern orthodoxy on slavery: it was not a necessary evil, as older Southerners had argued, but a positive good, constitutionally protected and morally justified. Davis's strategy in early 1860 was to force Northern Democrats to either accept a set of pro-slavery resolutions or face the dissolution of the Democratic Party, the last truly national institution binding North and South.</p>
+    </div>
+  </div>
+
+  <img src="pics/senate.jpg" alt="United States Senate chamber" class="context-img"/>
+
+  <div class="learn-card">
+    <p class="lc-label">Description</p>
+    <h3>The Four Resolutions</h3>
+    <p>On February 2, 1860, Davis introduced four resolutions in the U.S. Senate. First: neither Congress nor a territorial legislature could abolish or restrict slavery in any territory. Second: Congress was constitutionally obligated to protect slaveholders' property rights in all territories, if local governments failed to do so. Third: no state could legally obstruct the return of fugitive enslaved people. Fourth: any attack on slavery, by any entity, was an unconstitutional attack on the rights and equality of the Southern states. The resolutions were not modest requests. They were a demand that the federal government become an active enforcer and protector of slavery nationwide.</p>
+  </div>
+
+  <div class="pull-quote">
+    <p>"I hold that in the Union we have rights which are guaranteed to us by the Constitution, and that the denial of those rights is itself a dissolution of the bond which held us together."</p>
+    <cite>Jefferson Davis, 1860</cite>
+  </div>
+
+  <div class="learn-grid">
+    <div class="learn-card">
+      <p class="lc-label">Description</p>
+      <h3>The Senate Showdown</h3>
+      <p>Northern Democrat Stephen Douglas of Illinois refused to accept the resolutions. Douglas had built his career on "Popular Sovereignty," the idea that territorial settlers, not Congress, should decide the slavery question. Davis's resolutions would have required Congress to impose slavery on unwilling territories, destroying Douglas's position entirely. Douglas knew that accepting the resolutions would cost him every Northern state in the 1860 election. Davis knew that Douglas's refusal would destroy the Democratic Party. Both men were right.</p>
+    </div>
+    <div class="learn-card">
+      <p class="lc-label">Description</p>
+      <h3>The Party Splits</h3>
+      <p>At the 1860 Democratic National Convention in Charleston, South Carolina, the party fractured catastrophically. Southern delegates, unwilling to nominate Douglas, walked out. The convention reconvened in Baltimore; Southern delegates walked out again. Two separate Democratic conventions nominated two separate candidates: Douglas for the North, John C. Breckinridge of Kentucky for the South. A Constitutional Union candidate, John Bell, entered the race as well. The divided opposition vote handed the presidency to Abraham Lincoln, who did not even appear on the ballot in most Southern states.</p>
+    </div>
+  </div>
+
+  <div class="learn-sig">
+    <p><strong>Significance in American History:</strong> The Jefferson Davis Resolutions were the final legislative attempt by Southern leadership to force the United States government to actively protect and expand slavery. The failure to achieve this goal, and the Democratic Party split that followed, guaranteed Lincoln's election. Lincoln's election triggered South Carolina's secession on December 20, 1860, followed by six more states within weeks. Jefferson Davis, who had introduced the resolutions as a U.S. Senator, was inaugurated as President of the Confederate States of America on February 18, 1861. The Civil War began on April 12, 1861, less than 14 months after Davis introduced his resolutions.</p>
+  </div>
+
+  <h3 style="font-family:'Playfair Display',serif; color:var(--gold-lt); font-size:1.1rem; margin: 2rem 0 1rem;">Key Figures: Davis Resolutions</h3>
+  <div class="learn-grid triple">
+    <div class="person-card">
+      <img src="pics/jefferson davis.jpg" alt="Jefferson Davis"/>
+      <h4>Jefferson Davis</h4>
+      <p>U.S. Senator from Mississippi. Introduced the resolutions. Would become President of the Confederate States of America in 1861.</p>
+    </div>
+    <div class="person-card">
+      <img src="pics/abrahamlincoln.jpg" alt="Abraham Lincoln"/>
+      <h4>Abraham Lincoln</h4>
+      <p>Republican presidential candidate in 1860. Won the election thanks to the Democratic Party split, triggering secession and the Civil War.</p>
+    </div>
+    <div class="person-card">
+      <img src="pics/harriet_tubman.jpg" alt="Harriet Tubman"/>
+      <h4>Harriet Tubman</h4>
+      <p>Abolitionist and conductor on the Underground Railroad. Her work rescuing enslaved people represented exactly what Davis's resolutions sought to prevent.</p>
+    </div>
+  </div>
+
+</div>
+</section>
+
+
+<!-- ===================================================
+     HARPER'S FERRY TAB (PRESENTATION)
+===================================================== -->
+<section id="tab-hf" class="tab-panel">
+<div class="panel-inner">
+
+  <div class="sec-heading">
+    <div class="sec-num">01</div>
+    <div class="sec-title">
+      <h2>The Raid on <em>Harper's Ferry</em></h2>
+      <span class="sec-tag">October 16 to 18, 1859 &nbsp;·&nbsp; Harper's Ferry, Virginia</span>
+    </div>
+  </div>
+
+  <!-- SLIDE 1: John Brown -->
+  <div class="slide">
+    <img src="pics/john brown.jpg" alt="John Brown, abolitionist" class="slide-img"/>
+    <div class="slide-content">
+      <p class="slide-label">Background</p>
+      <h3>Who Was John Brown?</h3>
+      <ul>
+        <li>Radical abolitionist from Ohio</li>
+        <li>Believed slavery could ONLY end through violent revolution</li>
+        <li>1856: Led the Pottawatomie Massacre in Kansas</li>
+        <li>By 1859, planning a mass slave rebellion</li>
+        <li>Secretly funded by the "Secret Six" wealthy Northern abolitionists</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- SLIDE 2: The Plan -->
+  <div class="slide flip">
+    <img src="pics3/harpers_ferry_battle.png" alt="Battle at Harper's Ferry armory grounds, October 1859" class="slide-img"/>
+    <div class="slide-content">
+      <p class="slide-label">The Plan</p>
+      <h3>Brown's Strategy</h3>
+      <ul>
+        <li>Target: the federal armory at Harper's Ferry, Virginia</li>
+        <li>Goal: seize 100,000+ weapons stored there</li>
+        <li>Plan: arm enslaved people and trigger a South-wide rebellion</li>
+        <li>Team: 21 men (16 white, 5 Black)</li>
+        <li>Date set: October 16, 1859</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- SLIDE 3: The Raid -->
+  <div class="slide">
+    <img src="pics/harpers_ferry_west_virginia.jpg" alt="Harper's Ferry, West Virginia" class="slide-img"/>
+    <div class="slide-content">
+      <p class="slide-label">The Night of the Raid</p>
+      <h3>October 16, 1859</h3>
+      <ul>
+        <li>10 PM: Brown's men crossed into Harper's Ferry</li>
+        <li>Seized the armory and engine house within hours</li>
+        <li>Cut telegraph lines to delay response</li>
+        <li>Took prominent local citizens as hostages</li>
+        <li>Waited for enslaved people to rise up and join them</li>
+        <li>They did not come. The plan collapsed.</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- SLIDE 4: The Engine House -->
+  <div class="slide flip">
+    <img src="pics/the_engine_house.jpg" alt="The engine house at Harper's Ferry" class="slide-img"/>
+    <div class="slide-content">
+      <p class="slide-label">The Siege</p>
+      <h3>Trapped in the Engine House</h3>
+      <ul>
+        <li>October 17: local militia and citizens surrounded Brown</li>
+        <li>Brown retreated to the engine house with hostages</li>
+        <li>October 18: U.S. Marines arrived under Colonel Robert E. Lee</li>
+        <li>Lee offered terms; Brown refused</li>
+        <li>Marines stormed the building in under 3 minutes</li>
+        <li>10 of Brown's men killed, including 2 of his sons</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- SLIDE 5: Robert E. Lee -->
+  <div class="slide">
+    <img src="pics/Robert_Edward_Lee.jpg" alt="Colonel Robert E. Lee" class="slide-img"/>
+    <div class="slide-content">
+      <p class="slide-label">Key Figure</p>
+      <h3>Colonel Robert E. Lee</h3>
+      <ul>
+        <li>U.S. Army officer sent to put down the raid</li>
+        <li>Commanded Marines who stormed the engine house</li>
+        <li>Celebrated as a federal hero for suppressing Brown</li>
+        <li>Two years later, resigned his commission</li>
+        <li>Became commander of Confederate forces against the Union he had defended</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- SLIDE 6: Trial and Execution -->
+  <div class="slide flip">
+    <img src="pics3/brown_scaffold.png" alt="John Brown ascending the scaffold, December 2, 1859" class="slide-img"/>
+    <div class="slide-content">
+      <p class="slide-label">Trial and Execution</p>
+      <h3>Brown's Last Stand</h3>
+      <ul>
+        <li>Tried for treason, murder, and conspiracy</li>
+        <li>Delivered calm, powerful speeches from the courtroom</li>
+        <li>Convicted on all charges</li>
+        <li>Hanged December 2, 1859</li>
+        <li>Final words: "the crimes of this guilty land will never be purged away but with blood"</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- SLIDE 7: National Reaction -->
+  <div class="slide">
+    <div class="slide-placeholder"><span class="pl-emoji">📰</span><p class="pl-label">Image Needed</p><p class="pl-cap">Newspaper headlines from December 1859 reporting Brown's execution and national reaction</p></div>
+    <div class="slide-content">
+      <p class="slide-label">National Reaction</p>
+      <h3>A Nation Divided by One Man</h3>
+      <ul>
+        <li>The North: church bells rang; Brown mourned as a martyr</li>
+        <li>The South: horror and rage; proof the North wanted to destroy them</li>
+        <li>Moderate voices drowned out by extremists on both sides</li>
+        <li>The political center collapsed</li>
+        <li>Secession sentiment surged across the South</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- SIGNIFICANCE -->
+  <div class="sig-banner">
+    <p class="sig-label">Significance in American History</p>
+    <ul>
+      <li>Shattered whatever trust remained between North and South</li>
+      <li>Convinced the South that the North was their enemy</li>
+      <li>Made compromise on slavery politically impossible</li>
+      <li>Boosted extremist voices and sidelined moderates</li>
+      <li>Directly accelerated the path to the Civil War</li>
+    </ul>
+  </div>
+
+  <!-- MCQ QUIZ -->
+  <div class="quiz-wrap" id="hf-quiz">
+    <h3>Assessment: Harper's Ferry</h3>
+    <p class="quiz-sub">Test Your Knowledge</p>
+    <div id="hf-quiz-container">
+      <div class="q-block" data-answer="B">
+        <p class="q-label">Question 1</p>
+        <p class="q-text">What was John Brown's PRIMARY goal in raiding the federal armory at Harper's Ferry in 1859?</p>
+        <div class="options">
+          <button class="opt-btn" data-val="A">A. To steal weapons for a planned attack on Southern politicians in Congress</button>
+          <button class="opt-btn" data-val="B">B. To seize weapons and spark a large-scale slave rebellion across the South</button>
+          <button class="opt-btn" data-val="C">C. To destroy the armory and prevent the South from accessing federal weapons</button>
+          <button class="opt-btn" data-val="D">D. To take hostages and exchange them for the release of captured abolitionists</button>
+        </div>
+        <p class="q-feedback"></p>
+      </div>
+      <div class="q-block" data-answer="C">
+        <p class="q-label">Question 2</p>
+        <p class="q-text">How did the North and South DIFFER in their reaction to John Brown's execution in December 1859?</p>
+        <div class="options">
+          <button class="opt-btn" data-val="A">A. The North demanded a presidential pardon; the South called for a harsher sentence</button>
+          <button class="opt-btn" data-val="B">B. Both sides largely agreed the execution was fair and legally justified</button>
+          <button class="opt-btn" data-val="C">C. Many in the North mourned Brown as a martyr, while the South saw him as proof of Northern hostility</button>
+          <button class="opt-btn" data-val="D">D. The North celebrated; the South feared it would inspire more raids</button>
+        </div>
+        <p class="q-feedback"></p>
+      </div>
+      <div class="score-board hidden" id="hf-score">
+        <p>You scored <span class="score-num" id="hf-score-num">0</span> out of <span class="score-num">2</span></p>
+        <button class="reset-btn" onclick="resetQuiz('hf-quiz-container','hf-score','hf-score-num')">Try Again</button>
+      </div>
+    </div>
+  </div>
+
+</div>
+</section>
+
+
+<!-- ===================================================
+     DAVIS RESOLUTIONS TAB (PRESENTATION)
+===================================================== -->
+<section id="tab-dr" class="tab-panel">
+<div class="panel-inner">
+
+  <div class="sec-heading">
+    <div class="sec-num">02</div>
+    <div class="sec-title">
+      <h2>The Jefferson Davis <em>Resolutions</em></h2>
+      <span class="sec-tag">February 2, 1860 &nbsp;·&nbsp; United States Senate, Washington D.C.</span>
+    </div>
+  </div>
+
+  <!-- SLIDE 1: Jefferson Davis -->
+  <div class="slide">
+    <img src="pics/jefferson davis.jpg" alt="Jefferson Davis" class="slide-img"/>
+    <div class="slide-content">
+      <p class="slide-label">Key Figure</p>
+      <h3>Who Was Jefferson Davis?</h3>
+      <ul>
+        <li>U.S. Senator from Mississippi and former Secretary of War</li>
+        <li>Champion of states' rights and the protection of slavery</li>
+        <li>Military hero of the Mexican-American War</li>
+        <li>Believed slavery was a positive good, not just a necessary evil</li>
+        <li>By 1860, convinced the South must take a stand or lose everything</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- SLIDE 2: South in 1860 -->
+  <div class="slide flip">
+    <img src="pics3/slavefree_map.png" alt="Map of free and slave states, 1861" class="slide-img"/>
+    <div class="slide-content">
+      <p class="slide-label">Context</p>
+      <h3>The South in 1860: Under Siege</h3>
+      <ul>
+        <li>Northern states passing laws blocking the Fugitive Slave Act</li>
+        <li>Republican Party expected to win the 1860 presidential election</li>
+        <li>Republicans opposed ALL expansion of slavery into new territories</li>
+        <li>After Harper's Ferry, the South felt the North wanted to destroy them</li>
+        <li>Southern Democrats decided to force a confrontation NOW</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- SLIDE 3: The Senate -->
+  <div class="slide">
+    <img src="pics/senate.jpg" alt="United States Senate chamber" class="slide-img"/>
+    <div class="slide-content">
+      <p class="slide-label">The Setting</p>
+      <h3>The Senate Floor, February 2, 1860</h3>
+      <ul>
+        <li>Davis rose to address the U.S. Senate</li>
+        <li>The chamber was the last arena where North and South still debated</li>
+        <li>Tensions ran extremely high after Harper's Ferry</li>
+        <li>This was not a request. It was an ultimatum.</li>
+        <li>Accept these terms, or the Democratic Party is over</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- SLIDE 4: The Four Resolutions -->
+  <div class="slide flip">
+    <img src="pics3/davis_speech_doc.png" alt="Jefferson Davis Senate speech on the rights of property in the territories, 1860" class="slide-img"/>
+    <div class="slide-content">
+      <p class="slide-label">The Four Resolutions</p>
+      <h3>Davis's Four Demands</h3>
+      <ul>
+        <li>(1) Congress CANNOT restrict slavery in any territory</li>
+        <li>(2) Congress MUST protect slaveholders' property in all territories</li>
+        <li>(3) No state can block the return of escaped enslaved people</li>
+        <li>(4) Any attack on slavery is an unconstitutional attack on Southern rights</li>
+        <li>Directed at Northern Democrats: accept this or the party is finished</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- SLIDE 5: Party Splits -->
+  <div class="slide">
+    <img src="pics/senate.jpg" alt="United States Senate chamber" class="slide-img"/>
+    <div class="slide-content">
+      <p class="slide-label">The Fallout</p>
+      <h3>The Democratic Party Splits</h3>
+      <ul>
+        <li>Northern Democrat Stephen Douglas refused to accept the resolutions</li>
+        <li>At the 1860 convention in Charleston, Southern delegates walked out</li>
+        <li>Two separate Democratic candidates were nominated</li>
+        <li>Douglas for the North; Breckinridge for the South</li>
+        <li>Split vote handed the presidency to Abraham Lincoln</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- SLIDE 6: Lincoln's Election -->
+  <div class="slide flip">
+    <img src="pics/abrahamlincoln.jpg" alt="Abraham Lincoln" class="slide-img"/>
+    <div class="slide-content">
+      <p class="slide-label">The Consequence</p>
+      <h3>Lincoln Wins, the South Secedes</h3>
+      <ul>
+        <li>November 1860: Lincoln elected with only Northern votes</li>
+        <li>Lincoln did not appear on the ballot in most Southern states</li>
+        <li>South Carolina seceded December 20, 1860</li>
+        <li>Six more states followed within weeks</li>
+        <li>The Civil War began April 12, 1861</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- SLIDE 7: Davis becomes President -->
+  <div class="slide">
+    <img src="pics/jefferson davis.jpg" alt="Jefferson Davis" class="slide-img"/>
+    <div class="slide-content">
+      <p class="slide-label">The Aftermath</p>
+      <h3>From Senator to President of the Confederacy</h3>
+      <ul>
+        <li>Davis resigned from the U.S. Senate in January 1861</li>
+        <li>Inaugurated as Confederate President, February 18, 1861</li>
+        <li>His resolutions had set the chain of events in motion</li>
+        <li>The man who demanded federal protection of slavery now led its armed defense</li>
+        <li>The Civil War lasted 4 years and killed 620,000 Americans</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- SIGNIFICANCE -->
+  <div class="sig-banner">
+    <p class="sig-label">Significance in American History</p>
+    <ul>
+      <li>Final legislative attempt to force federal protection of slavery</li>
+      <li>Destroyed the last national institution holding the country together: the Democratic Party</li>
+      <li>Made Abraham Lincoln's election inevitable</li>
+      <li>Lincoln's election triggered secession; secession triggered war</li>
+      <li>Davis went from introducing resolutions to commanding the Confederacy in under 12 months</li>
+    </ul>
+  </div>
+
+  <!-- MCQ QUIZ -->
+  <div class="quiz-wrap" id="dr-quiz">
+    <h3>Assessment: Davis Resolutions</h3>
+    <p class="quiz-sub">Test Your Knowledge</p>
+    <div id="dr-quiz-container">
+      <div class="q-block" data-answer="D">
+        <p class="q-label">Question 1</p>
+        <p class="q-text">Which BEST describes the central demand of Jefferson Davis's 1860 Senate Resolutions?</p>
+        <div class="options">
+          <button class="opt-btn" data-val="A">A. That Congress should allow each territory to vote on whether to permit slavery</button>
+          <button class="opt-btn" data-val="B">B. That all free states must repeal laws restricting the movement of free Black Americans</button>
+          <button class="opt-btn" data-val="C">C. That the federal government should gradually compensate slaveholders for emancipation</button>
+          <button class="opt-btn" data-val="D">D. That Congress must actively protect slavery in the territories as a constitutional right of slaveholders</button>
+        </div>
+        <p class="q-feedback"></p>
+      </div>
+      <div class="q-block" data-answer="A">
+        <p class="q-label">Question 2</p>
+        <p class="q-text">What was the MOST significant political consequence of the Jefferson Davis Resolutions?</p>
+        <div class="options">
+          <button class="opt-btn" data-val="A">A. The Democratic Party split into Northern and Southern factions, directly contributing to Lincoln's election in 1860</button>
+          <button class="opt-btn" data-val="B">B. Congress passed a new compromise protecting slavery in all existing U.S. territories</button>
+          <button class="opt-btn" data-val="C">C. The Supreme Court ruled that Davis's resolutions were unconstitutional</button>
+          <button class="opt-btn" data-val="D">D. The Republican Party adopted a pro-slavery platform to attract Southern voters</button>
+        </div>
+        <p class="q-feedback"></p>
+      </div>
+      <div class="score-board hidden" id="dr-score">
+        <p>You scored <span class="score-num" id="dr-score-num">0</span> out of <span class="score-num">2</span></p>
+        <button class="reset-btn" onclick="resetQuiz('dr-quiz-container','dr-score','dr-score-num')">Try Again</button>
+      </div>
+    </div>
+  </div>
+
+</div>
+</section>
+
+
+<!-- ===================================================
+     GUESS THE SOURCE TAB
+===================================================== -->
+<section id="tab-game" class="tab-panel">
+<div class="panel-inner">
+  <div class="game-wrap">
+    <h2>Guess the Source</h2>
+    <p class="game-sub">Who said it? Six historical quotes &nbsp;·&nbsp; Pick the speaker</p>
+    <div class="progress-dots" id="game-dots"></div>
+    <div id="game-area">
+      <!-- rendered by JS -->
+    </div>
+  </div>
+</div>
+</section>
+
+
+<!-- ===================================================
+     BIBLIOGRAPHY TAB
+===================================================== -->
+<section id="tab-bib" class="tab-panel">
+<div class="panel-inner">
+  <div class="bib-inner">
+    <h2>Bibliography</h2>
+    <p class="bib-lbl">Works Cited &nbsp;·&nbsp; MLA Format</p>
+    <div class="bib-entry">Appleby, Joyce, et al. <em>The American Vision.</em> McGraw-Hill Education, 2018, pp. 5.1, 5.2, 5.4, 5.6.</div>
+    <div class="bib-entry">Davidson, James West, et al. <em>United States History: Reconstruction to the Present.</em> Savvas Learning Company, 2019, pp. 198 to 200, 245 to 248.</div>
+    <div class="bib-entry">"John Brown's Raid on Harpers Ferry." <em>Gale in Context: U.S. History,</em> Gale, 2024, gale.com. Accessed 26 Mar. 2025.</div>
+    <div class="bib-entry">Reynolds, David S. <em>John Brown, Abolitionist: The Man Who Killed Slavery, Sparked the Civil War, and Seeded Civil Rights.</em> Knopf, 2005.</div>
+    <div class="bib-entry">Cooper, William J., Jr. <em>Jefferson Davis, American.</em> Knopf, 2000.</div>
+    <div class="bib-entry">"The Jefferson Davis Resolutions, 1860." <em>Gale in Context: U.S. History,</em> Gale, 2024, gale.com. Accessed 26 Mar. 2025.</div>
+  </div>
+</div>
+</section>
+
+
+<footer>
+  Team F &nbsp;·&nbsp; 10-1 &nbsp;·&nbsp; Incivility Unit &nbsp;·&nbsp; 1846 to 1860 &nbsp;·&nbsp; American History
+</footer>
+
+
+<script>
+/* ===== TAB NAVIGATION ===== */
+function showTab(id) {
+  document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('nav button').forEach(b => b.classList.remove('active'));
+  document.getElementById('tab-' + id).classList.add('active');
+  document.getElementById('btn-' + id).classList.add('active');
+  window.scrollTo(0, 0);
+}
+
+/* ===== QUIZ ENGINE ===== */
+function initQuiz(containerId, scoreBoardId, scoreNumId) {
+  const container = document.getElementById(containerId);
+  const blocks = container.querySelectorAll('.q-block');
+  let score = 0, answered = 0;
+
+  const correctMessages = [
+    "Correct! Excellent historical reasoning.",
+    "That's right! Well done.",
+    "Correct. Sharp analysis.",
+    "Exactly right."
+  ];
+
+  blocks.forEach((block, idx) => {
+    const correct = block.dataset.answer;
+    const btns = block.querySelectorAll('.opt-btn');
+    const feedback = block.querySelector('.q-feedback');
+
+    btns.forEach(btn => {
+      btn.addEventListener('click', () => {
+        const val = btn.dataset.val;
+        btns.forEach(b => b.disabled = true);
+        answered++;
+        if (val === correct) {
+          btn.classList.add('correct');
+          feedback.textContent = correctMessages[idx % correctMessages.length];
+          feedback.style.color = '#a8d4a8';
+          score++;
+        } else {
+          btn.classList.add('wrong');
+          feedback.textContent = 'Incorrect. The correct answer was ' + correct + '.';
+          feedback.style.color = '#e4a0a0';
+          block.querySelector('[data-val="' + correct + '"]').classList.add('correct');
+        }
+        if (answered === blocks.length) {
+          setTimeout(() => {
+            document.getElementById(scoreNumId).textContent = score;
+            document.getElementById(scoreBoardId).classList.remove('hidden');
+          }, 600);
+        }
+      });
+    });
+  });
+}
+
+function resetQuiz(containerId, scoreBoardId, scoreNumId) {
+  const container = document.getElementById(containerId);
+  container.querySelectorAll('.opt-btn').forEach(b => {
+    b.disabled = false;
+    b.classList.remove('correct', 'wrong');
+  });
+  container.querySelectorAll('.q-feedback').forEach(f => { f.textContent = ''; });
+  document.getElementById(scoreBoardId).classList.add('hidden');
+  initQuiz(containerId, scoreBoardId, scoreNumId);
+}
+
+initQuiz('hf-quiz-container', 'hf-score', 'hf-score-num');
+initQuiz('dr-quiz-container', 'dr-score', 'dr-score-num');
+
+
+/* ===== GUESS THE SOURCE GAME ===== */
+const QUOTES = [
+  {
+    quote: "I, John Brown, am now quite certain that the crimes of this guilty land will never be purged away but with blood.",
+    answer: "John Brown",
+    options: ["Frederick Douglass", "William Lloyd Garrison", "John Brown", "Harriet Tubman"],
+    explanation: "Brown handed this note to a guard on the morning of his execution, December 2, 1859."
+  },
+  {
+    quote: "I hold that in the Union we have rights which are guaranteed to us by the Constitution, and that the denial of those rights is itself a dissolution of the bond which held us together.",
+    answer: "Jefferson Davis",
+    options: ["John C. Calhoun", "Jefferson Davis", "James Buchanan", "Robert E. Lee"],
+    explanation: "Davis said this in the Senate during the debate over his 1860 resolutions, framing his ultimatum as a matter of constitutional rights."
+  },
+  {
+    quote: "A house divided against itself cannot stand. I believe this government cannot endure, permanently, half slave and half free.",
+    answer: "Abraham Lincoln",
+    options: ["William Seward", "Stephen Douglas", "Abraham Lincoln", "Salmon Chase"],
+    explanation: "Lincoln delivered this speech accepting the Republican nomination for U.S. Senate in Illinois, June 16, 1858."
+  },
+  {
+    quote: "If there is no struggle, there is no progress. Those who profess to favor freedom and yet deprecate agitation are men who want crops without plowing up the ground.",
+    answer: "Frederick Douglass",
+    options: ["Harriet Tubman", "John Brown", "Sojourner Truth", "Frederick Douglass"],
+    explanation: "Douglass wrote this in a letter in 1857, arguing that freedom requires active resistance, not passive hope."
+  },
+  {
+    quote: "I never ran my train off the track, and I never lost a passenger.",
+    answer: "Harriet Tubman",
+    options: ["Harriet Tubman", "Sojourner Truth", "Mary Ann Shadd", "Ellen Craft"],
+    explanation: "Tubman said this of her work on the Underground Railroad, having personally guided around 70 enslaved people to freedom."
+  },
+  {
+    quote: "I can anticipate no greater calamity for the country than a dissolution of the Union.",
+    answer: "Robert E. Lee",
+    options: ["Ulysses S. Grant", "Jefferson Davis", "Robert E. Lee", "Winfield Scott"],
+    explanation: "Lee wrote this in a letter in January 1861. Within months, he resigned his federal commission and took command of Confederate forces."
+  }
+];
+
+let gameIdx = 0;
+let gameScore = 0;
+let gameAnswered = false;
+
+function buildDots() {
+  const dotsEl = document.getElementById('game-dots');
+  dotsEl.innerHTML = '';
+  QUOTES.forEach((_, i) => {
+    const d = document.createElement('div');
+    d.className = 'prog-dot' + (i < gameIdx ? ' done' : i === gameIdx ? ' current' : '');
+    dotsEl.appendChild(d);
+  });
+}
+
+function renderQuestion() {
+  gameAnswered = false;
+  buildDots();
+  const q = QUOTES[gameIdx];
+  const area = document.getElementById('game-area');
+  area.innerHTML =
+    '<div class="game-quote-box"><p>"' + q.quote + '"</p></div>' +
+    '<p class="game-prompt">Who said this?</p>' +
+    '<div class="game-options" id="game-opts"></div>' +
+    '<p class="game-feedback" id="game-fb"></p>' +
+    '<button class="game-next" id="game-next-btn" onclick="nextQuestion()">' +
+      (gameIdx < QUOTES.length - 1 ? 'Next Quote' : 'See Results') +
+    '</button>';
+
+  const optsEl = document.getElementById('game-opts');
+  q.options.forEach(opt => {
+    const btn = document.createElement('button');
+    btn.className = 'game-opt';
+    btn.textContent = opt;
+    btn.onclick = () => selectAnswer(opt, q.answer, q.explanation);
+    optsEl.appendChild(btn);
+  });
+}
+
+function selectAnswer(chosen, correct, explanation) {
+  if (gameAnswered) return;
+  gameAnswered = true;
+  const opts = document.querySelectorAll('.game-opt');
+  const fb = document.getElementById('game-fb');
+  const nextBtn = document.getElementById('game-next-btn');
+
+  opts.forEach(b => {
+    b.disabled = true;
+    if (b.textContent === correct) b.classList.add('correct');
+    if (b.textContent === chosen && chosen !== correct) b.classList.add('wrong');
+  });
+
+  if (chosen === correct) {
+    gameScore++;
+    fb.textContent = 'Correct! ' + explanation;
+    fb.style.color = '#a8d4a8';
+  } else {
+    fb.textContent = 'Not quite. The answer is ' + correct + '. ' + explanation;
+    fb.style.color = '#e4a0a0';
+  }
+  nextBtn.style.display = 'inline-block';
+}
+
+function nextQuestion() {
+  gameIdx++;
+  if (gameIdx >= QUOTES.length) {
+    showGameEnd();
+  } else {
+    renderQuestion();
+  }
+}
+
+function showGameEnd() {
+  buildDots();
+  const pct = gameScore / QUOTES.length;
+  let medal, title, comment;
+  if (pct === 1)        { medal = '🥇'; title = 'Perfect Score!'; comment = 'Outstanding historical knowledge.'; }
+  else if (pct >= 0.67) { medal = '🥈'; title = 'Well Done!'; comment = 'Strong grasp of the era. Review the ones you missed.'; }
+  else if (pct >= 0.34) { medal = '🥉'; title = 'Good Effort!'; comment = 'Check the Learn tab to strengthen your knowledge.'; }
+  else                  { medal = '📚'; title = 'Keep Studying!'; comment = 'Head to the Learn tab for a full review.'; }
+
+  document.getElementById('game-area').innerHTML =
+    '<div class="game-end">' +
+      '<div class="end-medal">' + medal + '</div>' +
+      '<h3>' + title + '</h3>' +
+      '<p class="end-score">' + gameScore + ' out of ' + QUOTES.length + ' correct</p>' +
+      '<p class="end-comment">' + comment + '</p>' +
+      '<button class="reset-btn" onclick="restartGame()">Play Again</button>' +
+    '</div>';
+}
+
+function restartGame() {
+  gameIdx = 0;
+  gameScore = 0;
+  renderQuestion();
+}
+
+// init game when game tab is first shown
+document.getElementById('btn-game').addEventListener('click', function() {
+  if (gameIdx === 0 && !gameAnswered) renderQuestion();
+});
+// also render on load in case someone deep-links
+renderQuestion();
+</script>
+</body>
+</html>
